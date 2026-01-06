@@ -30,7 +30,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push
-        working-directory: ${{ matrix.service }}
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest .
+          DOCKER_BUILDKIT=0 docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest ./${{ matrix.service }}/
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
