@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "4000:4000"
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:4001
+      - PATIENT_SERVICE_URL=http://patient-service:4002
+      - DOCTOR_SERVICE_URL=http://doctor-service:4003
+      - APPOINTMENT_SERVICE_URL=http://appointment-service:4004
+    depends_on:
+      - auth-service
+      - patient-service
+      - doctor-service
+      - appointment-service
+    networks:
+      - healthcare-network
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "4001:4001"
+    networks:
+      - healthcare-network
+
+  patient-service:
+    build: ./patient-service
+    ports:
+      - "4002:4002"
+    networks:
+      - healthcare-network
+
+  doctor-service:
+    build: ./doctor-service
+    ports:
+      - "4003:4003"
+    networks:
+      - healthcare-network
+
+  appointment-service:
+    build: ./appointment-service
+    ports:
+      - "4004:4004"
+    environment:
+      - NOTIFICATION_SERVICE_URL=http://notification-service:4005
+    depends_on:
+      - notification-service
+    networks:
+      - healthcare-network
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "4005:4005"
+    networks:
+      - healthcare-network
+
+networks:
+  healthcare-network:
+    driver: bridge
