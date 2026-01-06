@@ -21,4 +21,5 @@ app.post("/login", (req, res) => {
 
 app.get("/health", (_, res) => res.send("Auth OK"));
 
+
 app.listen(4001, () => console.log("Auth Service on 4001"));
